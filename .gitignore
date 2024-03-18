@@ -1,0 +1,27 @@
+# IDEA files
+.vscode
+.idea
+
+# Buidler files
+dist/
+build/
+node_modules
+.env
+deployed-contracts.json
+
+
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/types
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+.coverage_artifacts
+.coverage_cache
+.coverage_contracts
