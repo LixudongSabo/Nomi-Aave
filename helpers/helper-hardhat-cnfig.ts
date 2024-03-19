@@ -48,7 +48,7 @@ export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
     [eEthereumNetwork.hardhat]: 65 * GWEI,
     [eEthereumNetwork.tenderly]: 1 * GWEI,
     [eEthereumNetwork.goerli]: 2 * GWEI,
-    [ePolygonNetwork.blueberry]: 35 * GWEI,
+    [ePolygonNetwork.blueberry]: 1 * GWEI,
     [ePolygonNetwork.matic]: 35 * GWEI,
 };
 

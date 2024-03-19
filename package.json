@@ -1,13 +1,14 @@
 {
   "name": "hardhat-project",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox-viem": "^2.0.0",
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "dotenv": "^16.4.5",
     "hardhat": "^2.22.1",
     "hardhat-typechain": "^0.3.5",
     "ts-generator": "^0.1.1",
     "typechain": "^4.0.1",
     "@typechain/ethers-v5": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "2.0.4",
     "typescript": "^5.0.4"
   }
 }
