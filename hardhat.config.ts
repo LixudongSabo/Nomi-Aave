@@ -1,7 +1,5 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox-viem";
-import 'hardhat-typechain'
-import 'hardhat-gas-reporter';
+import "@nomicfoundation/hardhat-toolbox";
 
 require('dotenv').config();
 
