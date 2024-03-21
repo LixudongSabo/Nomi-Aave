@@ -2,7 +2,7 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "SKIP_LOAD=true hardhat compile",
-    "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test/__setup.spec.ts"
+    "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test/test-aave/*.spec.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
@@ -10,9 +10,11 @@
     "@openzeppelin/contracts": "^5.0.2",
     "@openzeppelin/contracts-upgradeable": "^5.0.2",
     "@openzeppelin/defender-relay-client": "^1.54.1",
+    "@tenderly/hardhat-tenderly": "^2.2.2",
     "@types/lowdb": "^1.0.15",
     "bignumber.js": "^9.1.2",
     "dotenv": "^16.4.5",
+    "hardhat-tenderly": "^1.0.1",
     "lowdb": "1.0.0",
     "typechain": "^8.3.2"
   },

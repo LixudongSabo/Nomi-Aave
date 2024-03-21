@@ -1,4 +1,6 @@
-import { HardhatUserConfig } from "hardhat/config";
+import path from 'path';
+import fs from 'fs';
+import { HardhatUserConfig } from "hardhat/types";
 import "@nomicfoundation/hardhat-toolbox";
 
 require('dotenv').config();
@@ -12,10 +14,17 @@ import {
   NETWORKS_RPC_URL,
   NETWORKS_DEFAULT_GAS,
   buildForkConfig,
-} from './helpers/helper-hardhat-cnfig';
+} from './helper-hardhat-cnfig';
 import { BUIDLEREVM_CHAINID, COVERAGE_CHAINID } from './helpers/buidler-constants';
 import { accounts } from './helpers/test-wallets';
 
+import * as tenderly from "@tenderly/hardhat-tenderly";
+tenderly.setup(
+  {  automaticVerifications: false,}
+);
+
+// Custom Tasks Config
+const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
 
 // Network Config
 const DEFAULT_BLOCK_GAS_LIMIT = 8000000;
@@ -31,6 +40,22 @@ const MNEMONIC_PATH = "m/44'/60'/0'/0";
 
 // The Dev‘Hardhat Config
 const UNLIMITED_BYTECODE_SIZE = process.env.UNLIMITED_BYTECODE_SIZE === 'true';
+
+// Prevent to load scripts before compilation and typechain
+if (!SKIP_LOAD) {
+  ['misc', 'migrations', '.dev', '.issuance', 'verifications', 'deployments', 'helpers'].forEach(
+    (folder) => {
+      const tasksPath = path.join(__dirname, 'tasks', folder);
+      fs.readdirSync(tasksPath)
+        .filter((pth) => pth.includes('.ts'))
+        .forEach((task) => {
+          require(`${tasksPath}/${task}`);
+        });
+    }
+  );
+}
+
+require(`${path.join(__dirname, 'tasks/misc')}/set-bre.ts`);
 
 const getCommonNetworkConfig = (networkName: eNetwork, networkId: number) => ({
   url: NETWORKS_RPC_URL[networkName],
@@ -63,6 +88,12 @@ const config: HardhatUserConfig = {
     target: 'ethers-v5',
   },
 
+  tenderly: {
+    username: "Carter_Panther", // tenderly username (or organization name)
+    project: "aave", // project name
+    privateVerification: false // if true, contracts will be verified privately, if false, contracts will be verified publicly
+  },
+  
   etherscan: {
     apiKey: {
       mainnet: process.env.ETHERSCAN_KEY || '',
