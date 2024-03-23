@@ -72,7 +72,7 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
-    main: FORK ? getHardhatNetworkConfig(eEthereumNetwork.main, 1) : getCommonNetworkConfig(eEthereumNetwork.main, 1),
+    mainnet: FORK ? getHardhatNetworkConfig(eEthereumNetwork.mainnet, 1) : getCommonNetworkConfig(eEthereumNetwork.main, 1),
     tenderly: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 3030) : getCommonNetworkConfig(eEthereumNetwork.main, 3030),
     goerli: getCommonNetworkConfig(eEthereumNetwork.goerli, 5),
     hardhat: getHardhatNetworkConfig(eEthereumNetwork.hardhat, 31337),

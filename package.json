@@ -2,8 +2,9 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "SKIP_LOAD=true hardhat compile",
-    "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test/test-aave/*.spec.ts",
-    "bank:fork:blueberry": "npm run compile && hardhat bank:dev --network blueberry"
+    "hardhat:mainnet": "hardhat --network mainnet",
+    "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test-suites/test-example/*.spec.ts",
+    "bank:blueberry": "npm run compile && hardhat bank:dev --network blueberry",
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "2.0.2",

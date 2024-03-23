@@ -1,7 +1,7 @@
 export type eNetwork = eEthereumNetwork | ePolygonNetwork;
 
 export enum eEthereumNetwork {
-    main = 'main',
+    mainnet = 'mainnet',
     hardhat = 'hardhat',
     tenderly = 'tenderly',
     goerli = 'goerli',
@@ -21,7 +21,7 @@ export type iParamsPerNetwork<T> =
     iPolygonParamsPerNetwork<T>{}
 
 export interface iEthereumParamsPerNetwork<T> {
-  [eEthereumNetwork.main]: T;
+  [eEthereumNetwork.mainnet]: T;
   [eEthereumNetwork.hardhat]: T;
   [eEthereumNetwork.tenderly]: T;
   [eEthereumNetwork.goerli]: T;

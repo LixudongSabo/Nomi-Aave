@@ -5,7 +5,7 @@ import { Wallet, ContractTransaction } from 'ethers';
 import { tEthereumAddress } from './types';
 import { isAddress } from 'ethers/lib/utils';
 import { isZeroAddress } from 'ethereumjs-util';
-import { SignerWithAddress } from '../test/test-aave/helpers/make-suite';
+import { SignerWithAddress } from '../test-suites/test-example/helpers/make-suite';
 import { usingTenderly } from './tenderly-utils';
 
 export const getDb = () => low(new FileSync('./deployed-contracts.json'));
