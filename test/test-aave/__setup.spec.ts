@@ -7,14 +7,15 @@ import {
 } from '../../helpers/conteacts-helpers';
 import { Signer } from 'ethers';
 import {
-    deployEtherBankFactory
-  } from '../../helpers/conteacts-deployments';
+    deployExampleBank
+} from '../../helpers/conteacts-deployments';
+import { initializeMakeSuite } from './helpers/make-suite';
 
 const buildTestEnv = async (deployer: Signer, secondaryWallet: Signer) => {
     console.time('setup');
     const pantherAdmin = await deployer.getAddress();
-    
-    const addressesProvider = await deployEtherBankFactory();
+
+    const addressesProvider = await deployExampleBank();
 
     console.timeEnd('setup');
 }
@@ -28,14 +29,17 @@ before(async () => {
     const [deployer, secondaryWallet] = await getEthersSigners();
 
     const FORK = process.env.FORK;
-
+    const IS_FLAG = process.env.IS_FLAG || "";
     if (FORK) {
-        await rawBRE.run('aave:mainnet', { skipRegistry: true });
+        if(IS_FLAG && IS_FLAG === "dev"){
+            await rawBRE.run('bank:dev');
+        }
     } else {
         console.log('-> Deploying test environment...');
         await buildTestEnv(deployer, secondaryWallet);
     }
 
+    await initializeMakeSuite();
     console.log('\n***************');
     console.log('Setup and snapshot finished');
     console.log('***************\n');

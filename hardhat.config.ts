@@ -2,48 +2,27 @@ import path from 'path';
 import fs from 'fs';
 import { HardhatUserConfig } from "hardhat/types";
 import "@nomicfoundation/hardhat-toolbox";
-
-require('dotenv').config();
-
 import {
   eEthereumNetwork,
-  eNetwork,
   ePolygonNetwork,
 } from './helpers/types';
 import {
-  NETWORKS_RPC_URL,
-  NETWORKS_DEFAULT_GAS,
-  buildForkConfig,
+  getCommonNetworkConfig,
+  getHardhatNetworkConfig
 } from './helper-hardhat-cnfig';
-import { BUIDLEREVM_CHAINID, COVERAGE_CHAINID } from './helpers/buidler-constants';
-import { accounts } from './helpers/test-wallets';
+import "@tenderly/hardhat-tenderly";
+import { builtinApiKey, builtinChains } from './helpers/chain-config';
 
-import * as tenderly from "@tenderly/hardhat-tenderly";
-tenderly.setup(
-  {  automaticVerifications: false,}
-);
+require('dotenv').config();
 
 // Custom Tasks Config
 const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
 
-// Network Config
-const DEFAULT_BLOCK_GAS_LIMIT = 8000000;
-const DEFAULT_GAS_MUL = 5;
-
-// The major milestones
-const HARDFORK = 'cancun';
-
-// The mock of accounts || The account of deploy
-const ACCOUNTS_KEY = process.env.MOCK_ACCOUNTS_KEY || '';
-const MNEMONIC = process.env.MNEMONIC || '';
-const MNEMONIC_PATH = "m/44'/60'/0'/0";
-
-// The Dev‘Hardhat Config
-const UNLIMITED_BYTECODE_SIZE = process.env.UNLIMITED_BYTECODE_SIZE === 'true';
+const FORK = process.env.FORK || '';
 
 // Prevent to load scripts before compilation and typechain
 if (!SKIP_LOAD) {
-  ['misc', 'migrations', '.dev', '.issuance', 'verifications', 'deployments', 'helpers'].forEach(
+  ['misc', 'migrations', 'dev'].forEach(
     (folder) => {
       const tasksPath = path.join(__dirname, 'tasks', folder);
       fs.readdirSync(tasksPath)
@@ -56,23 +35,6 @@ if (!SKIP_LOAD) {
 }
 
 require(`${path.join(__dirname, 'tasks/misc')}/set-bre.ts`);
-
-const getCommonNetworkConfig = (networkName: eNetwork, networkId: number) => ({
-  url: NETWORKS_RPC_URL[networkName],
-  hardfork: HARDFORK,
-  blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-  gasMultiplier: DEFAULT_GAS_MUL,
-  gasPrice: NETWORKS_DEFAULT_GAS[networkName],
-  chainId: networkId,
-  accounts: ACCOUNTS_KEY
-    ? [ACCOUNTS_KEY]
-    : {
-      mnemonic: MNEMONIC,
-      path: MNEMONIC_PATH,
-      initialIndex: 0,
-      count: 20,
-    },
-});
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -91,48 +53,31 @@ const config: HardhatUserConfig = {
   tenderly: {
     username: "Carter_Panther", // tenderly username (or organization name)
     project: "aave", // project name
-    privateVerification: false // if true, contracts will be verified privately, if false, contracts will be verified publicly
+    forkNetwork: '1', //Network id of the network we want to fork
   },
-  
+
   etherscan: {
     apiKey: {
-      mainnet: process.env.ETHERSCAN_KEY || '',
-      goerli: process.env.ETHERSCAN_KEY || '',
-
-      polygon: process.env.ETHERSCAN_POLYGON_KEY || '',
-      polygonZkEVMTestnet: process.env.POLYGONSCAN_API_KEY || "",
-    }
+      ...builtinApiKey
+    },
+    customChains: [
+      ...builtinChains
+    ]
   },
 
   gasReporter: {
-    currency: "USD",
-    coinmarketcap: "16489d0b-da44-41f7-bfc4-45def8dc6ab4",
+    currency: process.env.CONVERT || '',
+    coinmarketcap: process.env.CMC_PRO_API_KEY || '',
     enabled: true
   },
 
   networks: {
-    main: getCommonNetworkConfig(eEthereumNetwork.main, 1),
-    tenderly: getCommonNetworkConfig(eEthereumNetwork.tenderly, 3030),
+    main: FORK ? getHardhatNetworkConfig(eEthereumNetwork.main, 1) : getCommonNetworkConfig(eEthereumNetwork.main, 1),
+    tenderly: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 3030) : getCommonNetworkConfig(eEthereumNetwork.main, 3030),
     goerli: getCommonNetworkConfig(eEthereumNetwork.goerli, 5),
-
-    matic: getCommonNetworkConfig(ePolygonNetwork.matic, 137),
+    hardhat: getHardhatNetworkConfig(eEthereumNetwork.hardhat, 31337),
+    matic: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 137) : getCommonNetworkConfig(ePolygonNetwork.matic, 137),
     blueberry: getCommonNetworkConfig(ePolygonNetwork.blueberry, 1442),
-
-    hardhat: {
-      hardfork: 'cancun',
-      blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-      gas: DEFAULT_BLOCK_GAS_LIMIT,
-      gasPrice: 8000000000,
-      allowUnlimitedContractSize: UNLIMITED_BYTECODE_SIZE,
-      chainId: BUIDLEREVM_CHAINID,
-      throwOnTransactionFailures: true,
-      throwOnCallFailures: true,
-      accounts: accounts.map(({ secretKey, balance }: { secretKey: string; balance: string }) => ({
-        privateKey: secretKey,
-        balance,
-      })),
-      forking: buildForkConfig(),
-    },
   }
 };
 

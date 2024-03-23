@@ -25,7 +25,7 @@ task(`set-DRE`, `Inits the DRE, to have access to all the plugins' objects`).set
             const provider = new _DRE.ethers.providers.Web3Provider(net);
             _DRE.ethers.provider = provider;
             console.log('- Initialized Tenderly fork:');
-            console.log('  - Fork: ', net.getForkID());
+            console.log('  - Fork: ', net.getFork());
             console.log('  - Head: ', net.getHead());
         }
 

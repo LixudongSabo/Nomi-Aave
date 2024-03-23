@@ -14,6 +14,10 @@ contract ExampleBank is Ownable {
         return accountOwner;
     }
 
+    function getBalance() external view returns (uint) {
+        return address(this).balance;
+    }
+
     function deposit() external payable onlyOwner {}
 
     function withdraw(uint256 amount) external onlyOwner {
