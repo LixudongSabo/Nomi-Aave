@@ -44,55 +44,55 @@ export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined =
 };
 
 export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
-    [eEthereumNetwork.main]: ALCHEMY_KEY
+    [eEthereumNetwork.mainnet]: ALCHEMY_KEY
         ? `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
         : `https://mainnet.infura.io/v3/${INFURA_KEY}`,
     [eEthereumNetwork.hardhat]: 'http://localhost:8545',
     [eEthereumNetwork.tenderly]: `https://rpc.tenderly.co/fork/`,
     [eEthereumNetwork.goerli]: `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_KEY}`,
-    [ePolygonNetwork.blueberry]: 'https://rpc.public.zkevm-test.net',
-    [ePolygonNetwork.matic]: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_KEY}`,
+    [ePolygonNetwork.polygonZkEVMTestnet]: 'https://rpc.public.zkevm-test.net',
+    [ePolygonNetwork.polygon]: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_KEY}`,
 };
 
 export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
-    [eEthereumNetwork.main]: 65 * GWEI,
+    [eEthereumNetwork.mainnet]: 65 * GWEI,
     [eEthereumNetwork.hardhat]: 8 * GWEI,
     [eEthereumNetwork.tenderly]: 1 * GWEI,
     [eEthereumNetwork.goerli]: 2 * GWEI,
-    [ePolygonNetwork.blueberry]: 1 * GWEI,
-    [ePolygonNetwork.matic]: 35 * GWEI,
+    [ePolygonNetwork.polygonZkEVMTestnet]: 1 * GWEI,
+    [ePolygonNetwork.polygon]: 35 * GWEI,
 };
 
 export const BLOCK_TO_FORK: iParamsPerNetwork<number | undefined> = {
-    [eEthereumNetwork.main]: 12406069,
+    [eEthereumNetwork.mainnet]: 12406069,
     [eEthereumNetwork.hardhat]: undefined,
     [eEthereumNetwork.tenderly]: undefined,
     [eEthereumNetwork.goerli]: undefined,
-    [ePolygonNetwork.blueberry]: undefined,
-    [ePolygonNetwork.matic]: undefined,
+    [ePolygonNetwork.polygonZkEVMTestnet]: undefined,
+    [ePolygonNetwork.polygon]: undefined,
 };
 
 export const HARDFORK: iParamsPerNetwork<string | undefined> = {
-    [eEthereumNetwork.main]: 'cancun',
+    [eEthereumNetwork.mainnet]: 'cancun',
     [eEthereumNetwork.hardhat]: 'cancun',
     [eEthereumNetwork.tenderly]: undefined,
     [eEthereumNetwork.goerli]: 'cancun',
-    [ePolygonNetwork.blueberry]: undefined,
-    [ePolygonNetwork.matic]: undefined,
+    [ePolygonNetwork.polygonZkEVMTestnet]: undefined,
+    [ePolygonNetwork.polygon]: undefined,
 };
 
 export const UNLIMITED_BYTECODE_SIZE: iParamsPerNetwork<boolean> = {
-    [eEthereumNetwork.main]: true,
+    [eEthereumNetwork.mainnet]: true,
     [eEthereumNetwork.hardhat]: true,
     [eEthereumNetwork.tenderly]: true,
     [eEthereumNetwork.goerli]: true,
-    [ePolygonNetwork.blueberry]: true,
-    [ePolygonNetwork.matic]: true,
+    [ePolygonNetwork.polygonZkEVMTestnet]: true,
+    [ePolygonNetwork.polygon]: true,
 };
 
 export const ACCOUNTS: iParamsPerNetwork<HardhatNetworkAccountUserConfig[]
     | HardhatNetworkHDAccountsUserConfig> = {
-    [eEthereumNetwork.main]: [{ privateKey: ACCOUNTS_KEY, balance: "" }],
+    [eEthereumNetwork.mainnet]: [{ privateKey: ACCOUNTS_KEY, balance: "" }],
     [eEthereumNetwork.hardhat]: accounts.map(({ secretKey, balance }: { secretKey: string; balance: string }) => ({
         privateKey: secretKey,
         balance,
@@ -107,8 +107,8 @@ export const ACCOUNTS: iParamsPerNetwork<HardhatNetworkAccountUserConfig[]
         privateKey: secretKey,
         balance,
     })),
-    [ePolygonNetwork.blueberry]: [{ privateKey: ACCOUNTS_KEY, balance: "" }],
-    [ePolygonNetwork.matic]: {
+    [ePolygonNetwork.polygonZkEVMTestnet]: [{ privateKey: ACCOUNTS_KEY, balance: "" }],
+    [ePolygonNetwork.polygon]: {
         mnemonic: MNEMONIC,
         path: MNEMONIC_PATH,
         initialIndex: 0,
@@ -117,12 +117,12 @@ export const ACCOUNTS: iParamsPerNetwork<HardhatNetworkAccountUserConfig[]
 };
 
 export const FORKING: iParamsPerNetwork<HardhatNetworkForkingUserConfig | undefined> = {
-    [eEthereumNetwork.main]: undefined,
+    [eEthereumNetwork.mainnet]: undefined,
     [eEthereumNetwork.hardhat]: buildForkConfig(),
     [eEthereumNetwork.tenderly]: undefined,
     [eEthereumNetwork.goerli]: undefined,
-    [ePolygonNetwork.blueberry]: undefined,
-    [ePolygonNetwork.matic]: undefined,
+    [ePolygonNetwork.polygonZkEVMTestnet]: undefined,
+    [ePolygonNetwork.polygon]: undefined,
 }
 
 export const getCommonNetworkConfig = (networkName: eNetwork, networkId: number) => (

@@ -2,6 +2,7 @@ import { exit } from 'process';
 import fs from 'fs';
 import { file } from 'tmp-promise';
 import { DRE } from './misc-utils';
+import {SUPPORTED_ETHERSCAN_NETWORKS} from '../helpers/chain-config';
 
 const fatalErrors = [
     `The address provided as argument contains a contract, but its bytecode`,
@@ -14,16 +15,7 @@ const okErrors = [`Contract source code already verified`, 'Already Verified'];
 
 const unableVerifyError = 'Fail - Unable to verify';
 
-export const SUPPORTED_ETHERSCAN_NETWORKS = [
-    'main',
-    'ropsten',
-    'kovan',
-    'matic',
-    'mumbai',
-    'goerli',
-    'avalanche',
-    'fuji',
-];
+
 
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));

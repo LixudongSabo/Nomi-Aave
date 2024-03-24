@@ -22,7 +22,7 @@ const FORK = process.env.FORK || '';
 
 // Prevent to load scripts before compilation and typechain
 if (!SKIP_LOAD) {
-  ['misc', 'migrations', 'dev'].forEach(
+  ['misc', 'migrations', 'dev', 'issuance', 'secure'].forEach(
     (folder) => {
       const tasksPath = path.join(__dirname, 'tasks', folder);
       fs.readdirSync(tasksPath)
@@ -72,12 +72,12 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
-    mainnet: FORK ? getHardhatNetworkConfig(eEthereumNetwork.mainnet, 1) : getCommonNetworkConfig(eEthereumNetwork.main, 1),
-    tenderly: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 3030) : getCommonNetworkConfig(eEthereumNetwork.main, 3030),
+    mainnet: FORK ? getHardhatNetworkConfig(eEthereumNetwork.mainnet, 1) : getCommonNetworkConfig(eEthereumNetwork.mainnet, 1),
+    tenderly: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 3030) : getCommonNetworkConfig(eEthereumNetwork.tenderly, 3030),
     goerli: getCommonNetworkConfig(eEthereumNetwork.goerli, 5),
     hardhat: getHardhatNetworkConfig(eEthereumNetwork.hardhat, 31337),
-    matic: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 137) : getCommonNetworkConfig(ePolygonNetwork.matic, 137),
-    blueberry: getCommonNetworkConfig(ePolygonNetwork.blueberry, 1442),
+    polygon: FORK ? getHardhatNetworkConfig(ePolygonNetwork.polygon, 137) : getCommonNetworkConfig(ePolygonNetwork.polygon, 137),
+    polygonZkEVMTestnet: getCommonNetworkConfig(ePolygonNetwork.polygonZkEVMTestnet, 1442),
   }
 };
 

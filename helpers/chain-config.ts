@@ -1,9 +1,16 @@
+export const SUPPORTED_ETHERSCAN_NETWORKS = [
+    'mainnet',
+    'goerli',
+    'polygon',
+    'polygonZkEVMTestnet',
+];
+
 const builtinApiKey = {
     mainnet: process.env.ETHERSCAN_KEY || '',
     goerli: process.env.ETHERSCAN_KEY || '',
 
     polygon: process.env.ETHERSCAN_POLYGON_KEY || '',
-    polygonZkEVMTestnet: process.env.POLYGONSCAN_API_KEY || "",
+    polygonZkEVMTestnet: process.env.ETHERSCAN_POLYGON_ZkEVM_KEY || "",
 }
 
 const builtinChains = [

@@ -33,30 +33,30 @@ export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined =
 };
 
 export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
-    [eEthereumNetwork.main]: ALCHEMY_KEY
+    [eEthereumNetwork.mainnet]: ALCHEMY_KEY
         ? `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
         : `https://mainnet.infura.io/v3/${INFURA_KEY}`,
     [eEthereumNetwork.hardhat]: 'http://localhost:8545',
     [eEthereumNetwork.tenderly]: `https://rpc.tenderly.co/fork/`,
     [eEthereumNetwork.goerli]: `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_KEY}`,
-    [ePolygonNetwork.blueberry]: 'https://rpc.public.zkevm-test.net',
-    [ePolygonNetwork.matic]: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_KEY}`,
+    [ePolygonNetwork.polygonZkEVMTestnet]: 'https://rpc.public.zkevm-test.net',
+    [ePolygonNetwork.polygon]: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_KEY}`,
 };
 
 export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
-    [eEthereumNetwork.main]: 65 * GWEI,
+    [eEthereumNetwork.mainnet]: 65 * GWEI,
     [eEthereumNetwork.hardhat]: 65 * GWEI,
     [eEthereumNetwork.tenderly]: 1 * GWEI,
     [eEthereumNetwork.goerli]: 2 * GWEI,
-    [ePolygonNetwork.blueberry]: 1 * GWEI,
-    [ePolygonNetwork.matic]: 35 * GWEI,
+    [ePolygonNetwork.polygonZkEVMTestnet]: 1 * GWEI,
+    [ePolygonNetwork.polygon]: 35 * GWEI,
 };
 
 export const BLOCK_TO_FORK: iParamsPerNetwork<number | undefined> = {
-    [eEthereumNetwork.main]: 12406069,
+    [eEthereumNetwork.mainnet]: 12406069,
     [eEthereumNetwork.hardhat]: undefined,
     [eEthereumNetwork.tenderly]: undefined,
     [eEthereumNetwork.goerli]: undefined,
-    [ePolygonNetwork.blueberry]: undefined,
-    [ePolygonNetwork.matic]: undefined,
+    [ePolygonNetwork.polygonZkEVMTestnet]: undefined,
+    [ePolygonNetwork.polygon]: undefined,
 };

@@ -2,9 +2,20 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "SKIP_LOAD=true hardhat compile",
+
     "hardhat:mainnet": "hardhat --network mainnet",
+    "hardhat:tenderly-mainnet": "hardhat --network tenderlyMainnet",
+    "hardhat:polygonZkEVMTestnet": "hardhat --network polygonZkEVMTestnet",
+
     "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test-suites/test-example/*.spec.ts",
-    "bank:blueberry": "npm run compile && hardhat bank:dev --network blueberry",
+    "bank:polygonZkEVMTestnet": "npm run compile && hardhat:polygonZkEVMTestnet bank:dev",
+
+    "nomi:fork:mainnet": "npm run compile && FORK=mainnet hardhat nomi:mainnet",
+    "nomi:mainnet:tenderly": "npm run compile && npm run hardhat:tenderly-mainnet -- nomi:mainnet",
+    "nomi:mainnet:issuance:migration": "npm run compile && npm run hardhat:mainnet -- nomi:mainnet --verify",
+
+    "nomi:fork:polygon": "npm run compile && FORK=polygon hardhat nomi:polygon",
+    "nomi:polygonZkEVMTestnet:issuance:migration": "npm run compile && npm run hardhat:polygonZkEVMTestnet -- nomi:polygon --verify"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
