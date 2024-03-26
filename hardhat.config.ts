@@ -22,7 +22,7 @@ const FORK = process.env.FORK || '';
 
 // Prevent to load scripts before compilation and typechain
 if (!SKIP_LOAD) {
-  ['misc', 'migrations', 'dev', 'issuance', 'secure','deployments'].forEach(
+  ['misc', 'migrations', 'dev', 'issuance', 'secure', 'deployments'].forEach(
     (folder) => {
       const tasksPath = path.join(__dirname, 'tasks', folder);
       fs.readdirSync(tasksPath)

@@ -1,31 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "./dependencies/openzeppelin/access/Ownable.sol";
+import {ExampleMathLibrary} from './dependencies/panther/utils/ExampleMathLibrary.sol';
+import './dependencies/openzeppelin/access/Ownable.sol';
 
 contract ExampleBank is Ownable {
-    address private accountOwner;
+  address private accountOwner;
 
-    constructor(address initialOwner) Ownable(initialOwner) {
-        accountOwner = initialOwner;
-    }
+  using ExampleMathLibrary for uint;
 
-    function getOwner() external view returns (address owner) {
-        return accountOwner;
-    }
+  constructor(address initialOwner) Ownable(initialOwner) {
+    accountOwner = initialOwner;
+  }
 
-    function getBalance() external view returns (uint) {
-        return address(this).balance;
-    }
+  function myFunction(uint x, uint y) public pure returns (uint) {
+    return x.add(y);
+  }
 
-    function deposit() external payable onlyOwner {}
+  function getOwner() external view returns (address owner) {
+    return accountOwner;
+  }
 
-    function withdraw(uint256 amount) external onlyOwner {
-        require(
-            address(this).balance >= amount,
-            "Insufficient balance in the contract"
-        );
+  function getBalance() external view returns (uint) {
+    return address(this).balance;
+  }
 
-        payable(accountOwner).transfer(amount);
-    }
+  function deposit() external payable onlyOwner {}
+
+  function withdraw(uint256 amount) external onlyOwner {
+    require(address(this).balance >= amount, 'Insufficient balance in the contract');
+
+    payable(accountOwner).transfer(amount);
+  }
 }

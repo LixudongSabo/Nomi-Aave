@@ -14,7 +14,8 @@
     "./scripts",
     "./test-suites",
     "./tasks",
-    "./helpers"
+    "./helpers",
+    "./types"
   ],
   "files": [
     "./hardhat.config.ts",

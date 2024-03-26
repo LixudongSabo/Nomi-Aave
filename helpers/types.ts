@@ -91,6 +91,7 @@ export enum eContractidNomi {
 }
 
 export enum eContractidExample {
+  ExampleMathLibrary = 'ExampleMathLibrary',
   ExampleBank = 'ExampleBank',
 }
 

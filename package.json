@@ -2,18 +2,14 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "SKIP_LOAD=true hardhat compile",
-
     "hardhat:mainnet": "hardhat --network mainnet",
     "hardhat:tenderly-mainnet": "hardhat --network tenderlyMainnet",
     "hardhat:polygonZkEVMTestnet": "hardhat --network polygonZkEVMTestnet",
-
     "test": "npm run compile && TS_NODE_TRANSPILE_ONLY=1 hardhat test ./test-suites/test-example/*.spec.ts",
-    "bank:polygonZkEVMTestnet": "npm run compile && hardhat:polygonZkEVMTestnet bank:dev",
-
+    "bank:polygonZkEVMTestnet": "npm run compile && hardhat --network polygonZkEVMTestnet bank:dev --verify",
     "nomi:fork:mainnet": "npm run compile && FORK=mainnet hardhat nomi:mainnet",
     "nomi:mainnet:tenderly": "npm run compile && npm run hardhat:tenderly-mainnet -- nomi:mainnet",
     "nomi:mainnet:issuance:migration": "npm run compile && npm run hardhat:mainnet -- nomi:mainnet --verify",
-
     "nomi:fork:polygon": "npm run compile && FORK=polygon hardhat nomi:polygon",
     "nomi:polygonZkEVMTestnet:issuance:migration": "npm run compile && npm run hardhat:polygonZkEVMTestnet -- nomi:polygon --verify"
   },
@@ -27,6 +23,8 @@
     "dotenv": "^16.4.5",
     "hardhat-tenderly": "^1.0.1",
     "lowdb": "1.0.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-solidity": "^1.3.1",
     "typechain": "^8.3.2"
   },
   "dependencies": {
