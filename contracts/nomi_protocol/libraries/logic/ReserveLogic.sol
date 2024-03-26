@@ -44,9 +44,6 @@ library ReserveLogic {
         uint256 variableBorrowIndex
     );
 
-    using ReserveLogic for DataTypes.ReserveData;
-    using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
-
     /**
      * @dev Returns the ongoing normalized income for the reserve
      * A value of 1e27 means there is no income. As time passes, the income is accrued
@@ -238,7 +235,7 @@ library ReserveLogic {
                 vars.totalStableDebt,
                 vars.totalVariableDebt,
                 vars.avgStableRate,
-                reserve.configuration.getReserveFactor()
+                ReserveConfiguration.getReserveFactor(reserve.configuration)
             );
         require(
             vars.newLiquidityRate <= type(uint128).max,
@@ -300,7 +297,7 @@ library ReserveLogic {
     ) internal {
         MintToTreasuryLocalVars memory vars;
 
-        vars.reserveFactor = reserve.configuration.getReserveFactor();
+        vars.reserveFactor = ReserveConfiguration.getReserveFactor(reserve.configuration);
 
         if (vars.reserveFactor == 0) {
             return;
