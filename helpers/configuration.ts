@@ -5,7 +5,7 @@ import {
     tEthereumAddress
 } from './types';
 import { DRE } from './misc-utils';
-import { getParamPerNetwork, getEthersSignersAddresses } from './conteacts-helpers';
+import { getParamPerNetwork, getEthersSignersAddresses } from './contracts-helpers';
 import AaveConfig from '../markets/mainnet';
 import MaticConfig from '../markets/polygon';
 
@@ -41,3 +41,15 @@ export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
     }
 };
 
+export const getGenesisPoolAdmin = async (
+    config: IBaseConfiguration
+  ): Promise<tEthereumAddress> => {
+    const currentNetwork = process.env.FORK ? process.env.FORK : DRE.network.name;
+    const targetAddress = getParamPerNetwork(config.PoolAdmin, <eNetwork>currentNetwork);
+    if (targetAddress) {
+      return targetAddress;
+    }
+    const addressList = await getEthersSignersAddresses();
+    const addressIndex = config.PoolAdminIndex;
+    return addressList[addressIndex];
+  };

@@ -4,11 +4,11 @@ import {
     getEthersSigners,
     registerContractInJsonDb,
     getEthersSignersAddresses,
-} from '../../helpers/conteacts-helpers';
+} from '../../helpers/contracts-helpers';
 import { Signer } from 'ethers';
 import {
     deployExampleBank
-} from '../../helpers/conteacts-deployments';
+} from '../../helpers/contracts-deployments';
 import { initializeMakeSuite } from './helpers/make-suite';
 
 const buildTestEnv = async (deployer: Signer, secondaryWallet: Signer) => {

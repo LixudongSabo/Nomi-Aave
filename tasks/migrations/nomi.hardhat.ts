@@ -2,11 +2,11 @@ import { task } from 'hardhat/config';
 import { checkVerification } from '../../helpers/etherscan-verification';
 import { ConfigNames, getEmergencyAdmin, loadPoolConfig } from '../../helpers/configuration';
 
-task('nomi:mainnet', 'Deploy development enviroment')
+task('nomi:hardhat', 'Deploy development enviroment')
     .addFlag('verify', 'Verify contracts at Etherscan')
     .addFlag('skipRegistry', 'Skip addresses provider registration at Addresses Provider Registry')
     .setAction(async ({ verify, skipRegistry }, DRE) => {
-        const POOL_NAME = ConfigNames.Mainnet;
+        const POOL_NAME = ConfigNames.Matic;
 
         await DRE.run('set-DRE');
 

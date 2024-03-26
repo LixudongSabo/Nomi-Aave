@@ -91,7 +91,7 @@ export const CommonsConfig: ICommonConfiguration = {
     [ePolygonNetwork.polygon]: '0x3ac4e9aa29940770aeC38fe853a4bbabb2dA9C19',
   },
   ProviderRegistryOwner: {
-    [ePolygonNetwork.polygonZkEVMTestnet]: '0x943E44157dC0302a5CEb172374d1749018a00994',
+    [ePolygonNetwork.polygonZkEVMTestnet]: '0xc783df8a850f42e7F7e57013759C285caa701eB6',
     [ePolygonNetwork.polygon]: '0xD7D86236d6c463521920fCC50A9CB56f8C8Bf008',
   },
   LendingRateOracle: {

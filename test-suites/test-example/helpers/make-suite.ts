@@ -3,7 +3,7 @@ import { DRE } from '../../../helpers/misc-utils';
 import { ExampleBank } from '../../../types';
 import { Signer } from 'ethers';
 import { eEthereumNetwork, eNetwork, tEthereumAddress } from '../../../helpers/types';
-import { getEthersSigners } from '../../../helpers/conteacts-helpers';
+import { getEthersSigners } from '../../../helpers/contracts-helpers';
 import {
     getExampleBank
   } from '../../../helpers/contracts-getters';

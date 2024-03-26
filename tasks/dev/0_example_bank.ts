@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 import {
     deployExampleBank
-} from '../../helpers/conteacts-deployments';
+} from '../../helpers/contracts-deployments';
 
 task('dev:deploy-example-bank', 'Deploy example bank')
     .addFlag('verify', 'Verify contracts at Etherscan')

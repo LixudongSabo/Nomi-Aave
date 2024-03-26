@@ -1,9 +1,9 @@
 import { formatEther } from 'ethers/lib/utils';
 import { task } from 'hardhat/config';
 import { ConfigNames, loadPoolConfig } from '../../helpers/configuration';
-import { deployLendingPoolAddressesProviderRegistry } from '../../helpers/conteacts-deployments';
+import { deployLendingPoolAddressesProviderRegistry } from '../../helpers/contracts-deployments';
 import { getFirstSigner } from '../../helpers/contracts-getters';
-import { getParamPerNetwork } from '../../helpers/conteacts-helpers';
+import { getParamPerNetwork } from '../../helpers/contracts-helpers';
 import { notFalsyOrZeroAddress } from '../../helpers/misc-utils';
 import { eNetwork } from '../../helpers/types';
 

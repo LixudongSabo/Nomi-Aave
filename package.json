@@ -20,8 +20,6 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
     "@nomicfoundation/hardhat-verify": "^2.0.5",
-    "@openzeppelin/contracts": "^5.0.2",
-    "@openzeppelin/contracts-upgradeable": "^5.0.2",
     "@openzeppelin/defender-relay-client": "^1.54.1",
     "@tenderly/hardhat-tenderly": "1.1.0-beta.5",
     "@types/lowdb": "^1.0.15",

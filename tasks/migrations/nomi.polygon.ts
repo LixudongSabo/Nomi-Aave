@@ -22,8 +22,10 @@ task('nomi:polygon', 'Deploy development enviroment')
         await DRE.run('issuance:deploy-address-provider-registry', { pool: POOL_NAME });
 
         console.log('1. Deploy address provider');
+        await DRE.run('issuance:deploy-address-provider', { pool: POOL_NAME, skipRegistry });
 
         console.log('2. Deploy lending pool');
+        await DRE.run('issuance:deploy-lending-pool', { pool: POOL_NAME });
 
         console.log('3. Deploy oracles');
 

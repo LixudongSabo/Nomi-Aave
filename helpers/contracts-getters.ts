@@ -1,5 +1,9 @@
-import { getEthersSigners } from './conteacts-helpers';
-import { ExampleBank__factory, LendingPoolAddressesProviderRegistry__factory } from '../types'
+import { getEthersSigners } from './contracts-helpers';
+import {
+   ExampleBank__factory,
+   LendingPoolAddressesProviderRegistry__factory,
+   LendingPoolAddressesProvider__factory
+} from '../types'
 import { DRE, getDb, notFalsyOrZeroAddress } from './misc-utils';
 import { eContractidExample, eContractidNomi, tEthereumAddress, } from './types';
 
@@ -33,3 +37,15 @@ export const getLendingPoolAddressesProviderRegistry = async (address?: tEthereu
          ).address,
       await getFirstSigner()
    );
+
+export const getLendingPoolAddressesProvider = async (address?: tEthereumAddress) => {
+   return await LendingPoolAddressesProvider__factory.connect(
+      address ||
+      (
+         await getDb()
+            .get(`${eContractidNomi.LendingPoolAddressesProvider}.${DRE.network.name}`)
+            .value()
+      ).address,
+      await getFirstSigner()
+   );
+};
