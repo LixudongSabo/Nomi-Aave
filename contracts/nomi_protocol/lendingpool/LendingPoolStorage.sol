@@ -8,6 +8,8 @@ import {ILendingPoolAddressesProvider} from '../interfaces/ILendingPoolAddresses
 import {DataTypes} from '../libraries/types/DataTypes.sol';
 
 contract LendingPoolStorage {
+
+
   ILendingPoolAddressesProvider internal _addressesProvider;
 
   mapping(address => DataTypes.ReserveData) internal _reserves;

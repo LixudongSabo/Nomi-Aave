@@ -21,10 +21,13 @@ import {DataTypes} from '../types/DataTypes.sol';
  * @notice Implements functions to validate the different actions of the protocol
  */
 library ValidationLogic {
+  using ReserveLogic for DataTypes.ReserveData;
   using SafeMath for uint256;
   using WadRayMath for uint256;
   using PercentageMath for uint256;
   using SafeERC20 for IERC20;
+  using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
+  using UserConfiguration for DataTypes.UserConfigurationMap;
 
   uint256 public constant REBALANCE_UP_LIQUIDITY_RATE_THRESHOLD = 4000;
   uint256 public constant REBALANCE_UP_USAGE_RATIO_THRESHOLD = 0.95 * 1e27; //usage ratio of 95%
@@ -35,7 +38,7 @@ library ValidationLogic {
    * @param amount The amount to be deposited
    */
   function validateDeposit(DataTypes.ReserveData storage reserve, uint256 amount) external view {
-    (bool isActive, bool isFrozen, , ) = ReserveConfiguration.getFlags(reserve.configuration);
+    (bool isActive, bool isFrozen, , ) = reserve.configuration.getFlags();
 
     require(amount != 0, Errors.VL_INVALID_AMOUNT);
     require(isActive, Errors.VL_NO_ACTIVE_RESERVE);
@@ -66,9 +69,7 @@ library ValidationLogic {
     require(amount != 0, Errors.VL_INVALID_AMOUNT);
     require(amount <= userBalance, Errors.VL_NOT_ENOUGH_AVAILABLE_USER_BALANCE);
 
-    (bool isActive, , , ) = ReserveConfiguration.getFlags(
-      reservesData[reserveAddress].configuration
-    );
+    (bool isActive, , , ) = reservesData[reserveAddress].configuration.getFlags();
     require(isActive, Errors.VL_NO_ACTIVE_RESERVE);
 
     require(
@@ -131,12 +132,9 @@ library ValidationLogic {
   ) external view {
     ValidateBorrowLocalVars memory vars;
 
-    (
-      vars.isActive,
-      vars.isFrozen,
-      vars.borrowingEnabled,
-      vars.stableRateBorrowingEnabled
-    ) = ReserveConfiguration.getFlags(reserve.configuration);
+    (vars.isActive, vars.isFrozen, vars.borrowingEnabled, vars.stableRateBorrowingEnabled) = reserve
+      .configuration
+      .getFlags();
 
     require(vars.isActive, Errors.VL_NO_ACTIVE_RESERVE);
     require(!vars.isFrozen, Errors.VL_RESERVE_FROZEN);
@@ -197,8 +195,8 @@ library ValidationLogic {
       require(vars.stableRateBorrowingEnabled, Errors.VL_STABLE_BORROWING_NOT_ENABLED);
 
       require(
-        !UserConfiguration.isUsingAsCollateral(userConfig, reserve.id) ||
-          ReserveConfiguration.getLtv(reserve.configuration) == 0 ||
+        !userConfig.isUsingAsCollateral(reserve.id) ||
+          reserve.configuration.getLtv() == 0 ||
           amount > IERC20(reserve.aTokenAddress).balanceOf(userAddress),
         Errors.VL_COLLATERAL_SAME_AS_BORROWING_CURRENCY
       );
@@ -229,7 +227,7 @@ library ValidationLogic {
     uint256 stableDebt,
     uint256 variableDebt
   ) external view {
-    bool isActive = ReserveConfiguration.getActive(reserve.configuration);
+    bool isActive = reserve.configuration.getActive();
 
     require(isActive, Errors.VL_NO_ACTIVE_RESERVE);
 
@@ -264,9 +262,7 @@ library ValidationLogic {
     uint256 variableDebt,
     DataTypes.InterestRateMode currentRateMode
   ) external view {
-    (bool isActive, bool isFrozen, , bool stableRateEnabled) = ReserveConfiguration.getFlags(
-      reserve.configuration
-    );
+    (bool isActive, bool isFrozen, , bool stableRateEnabled) = reserve.configuration.getFlags();
 
     require(isActive, Errors.VL_NO_ACTIVE_RESERVE);
     require(!isFrozen, Errors.VL_RESERVE_FROZEN);
@@ -285,8 +281,8 @@ library ValidationLogic {
       require(stableRateEnabled, Errors.VL_STABLE_BORROWING_NOT_ENABLED);
 
       require(
-        !UserConfiguration.isUsingAsCollateral(userConfig, reserve.id) ||
-          ReserveConfiguration.getLtv(reserve.configuration) == 0 ||
+        !userConfig.isUsingAsCollateral(reserve.id) ||
+          reserve.configuration.getLtv() == 0 ||
           stableDebt.add(variableDebt) > IERC20(reserve.aTokenAddress).balanceOf(msg.sender),
         Errors.VL_COLLATERAL_SAME_AS_BORROWING_CURRENCY
       );
@@ -310,15 +306,13 @@ library ValidationLogic {
     IERC20 variableDebtToken,
     address aTokenAddress
   ) external view {
-    (bool isActive, , , ) = ReserveConfiguration.getFlags(reserve.configuration);
+    (bool isActive, , , ) = reserve.configuration.getFlags();
 
     require(isActive, Errors.VL_NO_ACTIVE_RESERVE);
 
     //if the usage ratio is below 95%, no rebalances are needed
-    uint256 totalDebt = stableDebtToken
-      .totalSupply()
-      .add(variableDebtToken.totalSupply())
-      .wadToRay();
+    uint256 totalDebt =
+      stableDebtToken.totalSupply().add(variableDebtToken.totalSupply()).wadToRay();
     uint256 availableLiquidity = IERC20(reserveAddress).balanceOf(aTokenAddress).wadToRay();
     uint256 usageRatio = totalDebt == 0 ? 0 : totalDebt.rayDiv(availableLiquidity.add(totalDebt));
 
@@ -326,9 +320,8 @@ library ValidationLogic {
     //then we allow rebalancing of the stable rate positions.
 
     uint256 currentLiquidityRate = reserve.currentLiquidityRate;
-    uint256 maxVariableBorrowRate = IReserveInterestRateStrategy(
-      reserve.interestRateStrategyAddress
-    ).getMaxVariableBorrowRate();
+    uint256 maxVariableBorrowRate =
+      IReserveInterestRateStrategy(reserve.interestRateStrategyAddress).getMaxVariableBorrowRate();
 
     require(
       usageRatio >= REBALANCE_UP_USAGE_RATIO_THRESHOLD &&
@@ -404,8 +397,7 @@ library ValidationLogic {
     uint256 userVariableDebt
   ) internal view returns (uint256, string memory) {
     if (
-      !ReserveConfiguration.getActive(collateralReserve.configuration) ||
-      !ReserveConfiguration.getActive(principalReserve.configuration)
+      !collateralReserve.configuration.getActive() || !principalReserve.configuration.getActive()
     ) {
       return (
         uint256(Errors.CollateralManagerErrors.NO_ACTIVE_RESERVE),
@@ -420,11 +412,9 @@ library ValidationLogic {
       );
     }
 
-    bool isCollateralEnabled = ReserveConfiguration.getLiquidationThreshold(
-      collateralReserve.configuration
-    ) >
-      0 &&
-      UserConfiguration.isUsingAsCollateral(userConfig, collateralReserve.id);
+    bool isCollateralEnabled =
+      collateralReserve.configuration.getLiquidationThreshold() > 0 &&
+        userConfig.isUsingAsCollateral(collateralReserve.id);
 
     //if collateral isn't enabled as collateral by user, it cannot be liquidated
     if (!isCollateralEnabled) {
@@ -460,14 +450,15 @@ library ValidationLogic {
     uint256 reservesCount,
     address oracle
   ) internal view {
-    (, , , , uint256 healthFactor) = GenericLogic.calculateUserAccountData(
-      from,
-      reservesData,
-      userConfig,
-      reserves,
-      reservesCount,
-      oracle
-    );
+    (, , , , uint256 healthFactor) =
+      GenericLogic.calculateUserAccountData(
+        from,
+        reservesData,
+        userConfig,
+        reserves,
+        reservesCount,
+        oracle
+      );
 
     require(
       healthFactor >= GenericLogic.HEALTH_FACTOR_LIQUIDATION_THRESHOLD,

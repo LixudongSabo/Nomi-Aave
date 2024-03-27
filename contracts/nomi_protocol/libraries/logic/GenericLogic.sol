@@ -20,6 +20,8 @@ library GenericLogic {
   using SafeMath for uint256;
   using WadRayMath for uint256;
   using PercentageMath for uint256;
+  using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
+  using UserConfiguration for DataTypes.UserConfigurationMap;
 
   uint256 public constant HEALTH_FACTOR_LIQUIDATION_THRESHOLD = 1 ether;
 
@@ -58,18 +60,15 @@ library GenericLogic {
     uint256 reservesCount,
     address oracle
   ) external view returns (bool) {
-    if (
-      !UserConfiguration.isBorrowingAny(userConfig) ||
-      !UserConfiguration.isUsingAsCollateral(userConfig, reservesData[asset].id)
-    ) {
+    if (!userConfig.isBorrowingAny() || !userConfig.isUsingAsCollateral(reservesData[asset].id)) {
       return true;
     }
 
     balanceDecreaseAllowedLocalVars memory vars;
 
-    (, vars.liquidationThreshold, , vars.decimals, ) = ReserveConfiguration.getParams(
-      reservesData[asset].configuration
-    );
+    (, vars.liquidationThreshold, , vars.decimals, ) = reservesData[asset]
+      .configuration
+      .getParams();
 
     if (vars.liquidationThreshold == 0) {
       return true;
@@ -155,27 +154,25 @@ library GenericLogic {
   ) internal view returns (uint256, uint256, uint256, uint256, uint256) {
     CalculateUserAccountDataVars memory vars;
 
-    if (UserConfiguration.isEmpty(userConfig)) {
+    if (userConfig.isEmpty()) {
       return (0, 0, 0, 0, type(uint256).max);
     }
     for (vars.i = 0; vars.i < reservesCount; vars.i++) {
-      if (!UserConfiguration.isUsingAsCollateralOrBorrowing(userConfig, vars.i)) {
+      if (!userConfig.isUsingAsCollateralOrBorrowing(vars.i)) {
         continue;
       }
 
       vars.currentReserveAddress = reserves[vars.i];
       DataTypes.ReserveData storage currentReserve = reservesData[vars.currentReserveAddress];
 
-      (vars.ltv, vars.liquidationThreshold, , vars.decimals, ) = ReserveConfiguration.getParams(
-        currentReserve.configuration
-      );
+      (vars.ltv, vars.liquidationThreshold, , vars.decimals, ) = currentReserve
+        .configuration
+        .getParams();
 
       vars.tokenUnit = 10 ** vars.decimals;
       vars.reserveUnitPrice = IPriceOracleGetter(oracle).getAssetPrice(vars.currentReserveAddress);
 
-      if (
-        vars.liquidationThreshold != 0 && UserConfiguration.isUsingAsCollateral(userConfig, vars.i)
-      ) {
+      if (vars.liquidationThreshold != 0 && userConfig.isUsingAsCollateral(vars.i)) {
         vars.compoundedLiquidityBalance = IERC20(currentReserve.aTokenAddress).balanceOf(user);
 
         uint256 liquidityBalanceETH = vars
@@ -191,7 +188,7 @@ library GenericLogic {
         );
       }
 
-      if (UserConfiguration.isBorrowing(userConfig, vars.i)) {
+      if (userConfig.isBorrowing(vars.i)) {
         vars.compoundedBorrowBalance = IERC20(currentReserve.stableDebtTokenAddress).balanceOf(
           user
         );
