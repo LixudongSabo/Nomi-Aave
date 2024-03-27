@@ -10,9 +10,12 @@ import {
   eNetwork,
   iEthereumParamsPerNetwork,
   iPolygonParamsPerNetwork,
+  iParamsPerPool,
+  AavePools
 } from './types';
 import { usingTenderly, verifyAtTenderly } from './tenderly-utils';
 import { verifyEtherscanContract } from './etherscan-verification';
+import { ZERO_ADDRESS } from './constants';
 
 
 export const getEthersSigners = async (): Promise<Signer[]> => {
@@ -113,4 +116,28 @@ export const getParamPerNetwork = <T>(param: iParamsPerNetwork<T>, network: eNet
       return polygonZkEVMTestnet;
 
   }
+};
+
+export const getParamPerPool = <T>(
+  { mainnet, matic }: iParamsPerPool<T>,
+  pool: AavePools
+) => {
+  switch (pool) {
+    case AavePools.mainnet:
+      return mainnet;
+    case AavePools.matic:
+      return matic;
+    default:
+      return mainnet;
+  }
+};
+
+export const getOptionalParamAddressPerNetwork = (
+  param: iParamsPerNetwork<tEthereumAddress> | undefined | null,
+  network: eNetwork
+) => {
+  if (!param) {
+    return ZERO_ADDRESS;
+  }
+  return getParamPerNetwork(param, network);
 };

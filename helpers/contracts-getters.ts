@@ -2,7 +2,9 @@ import { getEthersSigners } from './contracts-helpers';
 import {
    ExampleBank__factory,
    LendingPoolAddressesProviderRegistry__factory,
-   LendingPoolAddressesProvider__factory
+   LendingPoolAddressesProvider__factory,
+   LendingPool__factory,
+   LendingPoolConfigurator__factory
 } from '../types'
 import { DRE, getDb, notFalsyOrZeroAddress } from './misc-utils';
 import { eContractidExample, eContractidNomi, tEthereumAddress, } from './types';
@@ -45,6 +47,25 @@ export const getLendingPoolAddressesProvider = async (address?: tEthereumAddress
          await getDb()
             .get(`${eContractidNomi.LendingPoolAddressesProvider}.${DRE.network.name}`)
             .value()
+      ).address,
+      await getFirstSigner()
+   );
+};
+
+export const getLendingPool = async (address?: tEthereumAddress) =>
+   await LendingPool__factory.connect(
+      address ||
+      (
+         await getDb().get(`${eContractidNomi.LendingPool}.${DRE.network.name}`).value()
+      ).address,
+      await getFirstSigner()
+   );
+
+export const getLendingPoolConfiguratorProxy = async (address?: tEthereumAddress) => {
+   return await LendingPoolConfigurator__factory.connect(
+      address ||
+      (
+         await getDb().get(`${eContractidNomi.LendingPoolConfigurator}.${DRE.network.name}`).value()
       ).address,
       await getFirstSigner()
    );

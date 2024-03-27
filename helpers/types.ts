@@ -289,3 +289,13 @@ export interface IMaticConfiguration extends ICommonConfiguration {
 }
 
 export type PoolConfiguration = ICommonConfiguration | IAaveConfiguration;
+
+export enum AavePools {
+  mainnet = 'mainnet',
+  matic = 'matic',
+}
+
+export interface iParamsPerPool<T> {
+  [AavePools.mainnet]: T;
+  [AavePools.matic]: T;
+}
