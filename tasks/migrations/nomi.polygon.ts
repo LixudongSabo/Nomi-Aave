@@ -1,7 +1,8 @@
 import { task } from 'hardhat/config';
 import { checkVerification } from '../../helpers/etherscan-verification';
-import { ConfigNames, getEmergencyAdmin, loadPoolConfig } from '../../helpers/configuration';
+import { ConfigNames } from '../../helpers/configuration';
 import { printContracts } from '../../helpers/misc-utils';
+import { usingTenderly } from '../../helpers/tenderly-utils';
 
 task('nomi:polygon', 'Deploy development enviroment')
     .addFlag('verify', 'Verify contracts at Etherscan')
@@ -28,20 +29,33 @@ task('nomi:polygon', 'Deploy development enviroment')
         await DRE.run('issuance:deploy-lending-pool', { pool: POOL_NAME });
 
         console.log('3. Deploy oracles');
+        await DRE.run('issuance:deploy-oracles', { pool: POOL_NAME });
 
         console.log('4. Deploy Data Provider');
+        await DRE.run('issuance:data-provider', { pool: POOL_NAME });
 
         console.log('5. Deploy WETH Gateway');
+        await DRE.run('issuance:deploy-weth-gateway', { pool: POOL_NAME });
 
         console.log('6. Initialize lending pool');
-
-        console.log('7. Deploy UI helpers');
+        await DRE.run('issuance:initialize-lending-pool', { pool: POOL_NAME });
 
         if (verify) {
             printContracts();
-            console.log('8. Veryfing contracts');
+            console.log('7. Veryfing contracts');
             await DRE.run('secure:contract:nomi', { all: true, pool: POOL_NAME });
-          }
 
+            console.log('8. Veryfing aTokens and debtTokens');
+            await DRE.run('secure:tokens', { pool: POOL_NAME });
+        }
+
+        if (usingTenderly()) {
+            const postDeployHead = DRE.tenderlyNetwork.getHead();
+            const postDeployFork = DRE.tenderlyNetwork.getFork();
+            console.log('Tenderly Info');
+            console.log('- Head', postDeployHead);
+            console.log('- Fork', postDeployFork);
+        }
+        console.log('\nFinished migrations');
         printContracts();
     });

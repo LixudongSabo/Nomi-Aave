@@ -108,39 +108,39 @@ export const CommonsConfig: ICommonConfiguration = {
   PoolAdmin: {
     [eEthereumNetwork.hardhat]: undefined,
     [eEthereumNetwork.mainnet]: undefined,
-    [eEthereumNetwork.tenderly]: undefined,
+    [eEthereumNetwork.tenderly]: '0xc783df8a850f42e7F7e57013759C285caa701eB6',
     [eEthereumNetwork.goerli]: undefined,
   },
   PoolAdminIndex: 0,
   EmergencyAdmin: {
     [eEthereumNetwork.hardhat]: undefined,
     [eEthereumNetwork.mainnet]: undefined,
-    [eEthereumNetwork.tenderly]: undefined,
+    [eEthereumNetwork.tenderly]: '0xc783df8a850f42e7F7e57013759C285caa701eB6',
     [eEthereumNetwork.goerli]: undefined,
   },
   EmergencyAdminIndex: 1,
   ProviderRegistry: {
     [eEthereumNetwork.mainnet]: '0x52D306e36E3B6B02c153d0266ff0f85d18BCD413',
     [eEthereumNetwork.hardhat]: '',
-    [eEthereumNetwork.tenderly]: '0x52D306e36E3B6B02c153d0266ff0f85d18BCD413',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   ProviderRegistryOwner: {
     [eEthereumNetwork.mainnet]: '0xB9062896ec3A615a4e4444DF183F0531a77218AE',
     [eEthereumNetwork.hardhat]: '',
-    [eEthereumNetwork.tenderly]: '0xB9062896ec3A615a4e4444DF183F0531a77218AE',
+    [eEthereumNetwork.tenderly]: '0xc783df8a850f42e7F7e57013759C285caa701eB6',
     [eEthereumNetwork.goerli]: '',
   },
   LendingRateOracle: {
     [eEthereumNetwork.hardhat]: '',
     [eEthereumNetwork.mainnet]: '', //'0x8A32f49FFbA88aba6EFF96F45D8BD1D4b3f35c7D',
-    [eEthereumNetwork.tenderly]: '0x8A32f49FFbA88aba6EFF96F45D8BD1D4b3f35c7D',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   LendingPoolCollateralManager: {
     [eEthereumNetwork.hardhat]: '',
     [eEthereumNetwork.mainnet]: '0xbd4765210d4167CE2A5b87280D9E8Ee316D5EC7C',
-    [eEthereumNetwork.tenderly]: '0xbd4765210d4167CE2A5b87280D9E8Ee316D5EC7C',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   LendingPoolConfigurator: {
@@ -164,13 +164,13 @@ export const CommonsConfig: ICommonConfiguration = {
   TokenDistributor: {
     [eEthereumNetwork.hardhat]: '',
     [eEthereumNetwork.mainnet]: '0xe3d9988f676457123c5fd01297605efdd0cba1ae',
-    [eEthereumNetwork.tenderly]: '0xe3d9988f676457123c5fd01297605efdd0cba1ae',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   AaveOracle: {
     [eEthereumNetwork.hardhat]: '',
     [eEthereumNetwork.mainnet]: '', //'0xA50ba011c48153De246E5192C8f9258A2ba79Ca9',
-    [eEthereumNetwork.tenderly]: '0xA50ba011c48153De246E5192C8f9258A2ba79Ca9',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   FallbackOracle: {
@@ -246,19 +246,19 @@ export const CommonsConfig: ICommonConfiguration = {
   WETH: {
     [eEthereumNetwork.hardhat]: '', // deployed in local evm
     [eEthereumNetwork.mainnet]: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    [eEthereumNetwork.tenderly]: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   WrappedNativeToken: {
     [eEthereumNetwork.hardhat]: '', // deployed in local evm
     [eEthereumNetwork.mainnet]: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    [eEthereumNetwork.tenderly]: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '',
   },
   ReserveFactorTreasuryAddress: {
     [eEthereumNetwork.hardhat]: '0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c',
     [eEthereumNetwork.mainnet]: '0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c',
-    [eEthereumNetwork.tenderly]: '0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c',
+    [eEthereumNetwork.tenderly]: '',
     [eEthereumNetwork.goerli]: '0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c',
   },
   IncentivesController: {

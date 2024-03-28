@@ -28,7 +28,7 @@ const MNEMONIC_PATH = "m/44'/60'/0'/0";
 
 // Network Config
 const DEFAULT_BLOCK_GAS_LIMIT = 8000000;
-const DEFAULT_GAS_MUL = 5;
+const DEFAULT_GAS_MUL = 10;
 
 export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined => {
     let forkMode;
@@ -48,7 +48,7 @@ export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
         ? `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
         : `https://mainnet.infura.io/v3/${INFURA_KEY}`,
     [eEthereumNetwork.hardhat]: 'http://localhost:8545',
-    [eEthereumNetwork.tenderly]: `https://rpc.tenderly.co/fork/`,
+    [eEthereumNetwork.tenderly]: `https://rpc.tenderly.co/fork/f9fd48cb-ec8b-4f9e-85d1-8d1ec00d3c08`,
     [eEthereumNetwork.goerli]: `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_KEY}`,
     [ePolygonNetwork.polygonZkEVMTestnet]: 'https://rpc.public.zkevm-test.net',
     [ePolygonNetwork.polygon]: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_KEY}`,
@@ -57,7 +57,7 @@ export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
 export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
     [eEthereumNetwork.mainnet]: 65 * GWEI,
     [eEthereumNetwork.hardhat]: 8 * GWEI,
-    [eEthereumNetwork.tenderly]: 1 * GWEI,
+    [eEthereumNetwork.tenderly]: 28 * GWEI,
     [eEthereumNetwork.goerli]: 2 * GWEI,
     [ePolygonNetwork.polygonZkEVMTestnet]: 1 * GWEI,
     [ePolygonNetwork.polygon]: 35 * GWEI,

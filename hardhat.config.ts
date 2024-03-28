@@ -10,15 +10,14 @@ import {
   getCommonNetworkConfig,
   getHardhatNetworkConfig
 } from './helper-hardhat-cnfig';
-import "@tenderly/hardhat-tenderly";
+import * as tdly from "@tenderly/hardhat-tenderly";
 import { builtinApiKey, builtinChains } from './helpers/chain-config';
+tdly.setup();
 
 require('dotenv').config();
 
 // Custom Tasks Config
 const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
-
-const FORK = process.env.FORK || '';
 
 // Prevent to load scripts before compilation and typechain
 if (!SKIP_LOAD) {
@@ -53,7 +52,7 @@ const config: HardhatUserConfig = {
   tenderly: {
     username: "Carter_Panther", // tenderly username (or organization name)
     project: "aave", // project name
-    forkNetwork: '1', //Network id of the network we want to fork
+    privateVerification: true // if true, contracts will be verified privately, if false, contracts will be verified publicly
   },
 
   etherscan: {
@@ -72,11 +71,11 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
-    mainnet: FORK ? getHardhatNetworkConfig(eEthereumNetwork.mainnet, 1) : getCommonNetworkConfig(eEthereumNetwork.mainnet, 1),
-    tenderly: FORK ? getHardhatNetworkConfig(eEthereumNetwork.tenderly, 3030) : getCommonNetworkConfig(eEthereumNetwork.tenderly, 3030),
+    mainnet: getCommonNetworkConfig(eEthereumNetwork.mainnet, 1),
+    tenderly: getCommonNetworkConfig(eEthereumNetwork.tenderly, 3030),
     goerli: getCommonNetworkConfig(eEthereumNetwork.goerli, 5),
-    hardhat: getHardhatNetworkConfig(eEthereumNetwork.hardhat, 31337),
-    polygon: FORK ? getHardhatNetworkConfig(ePolygonNetwork.polygon, 137) : getCommonNetworkConfig(ePolygonNetwork.polygon, 137),
+    hardhat: getHardhatNetworkConfig(eEthereumNetwork.hardhat, 3030),
+    polygon: getCommonNetworkConfig(ePolygonNetwork.polygon, 137),
     polygonZkEVMTestnet: getCommonNetworkConfig(ePolygonNetwork.polygonZkEVMTestnet, 1442),
   }
 };

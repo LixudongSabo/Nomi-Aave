@@ -4,7 +4,8 @@ import {
     IReserveParams,
     eNetwork,
     eContractid,
-    tEthereumAddress
+    tEthereumAddress,
+    tStringTokenSmallUnits
 } from './types'
 import {
     ExampleMathLibrary__factory,
@@ -21,7 +22,16 @@ import {
     GenericLogic__factory,
     ValidationLogic__factory,
     LendingPoolConfigurator__factory,
-    StableAndVariableTokensHelper__factory
+    StableAndVariableTokensHelper__factory,
+    AaveOracle__factory,
+    LendingRateOracle__factory,
+    MockAggregator__factory,
+    WETH9Mocked__factory,
+    AaveProtocolDataProvider__factory,
+    WETHGateway__factory,
+    LendingPoolCollateralManager__factory,
+    WalletBalanceProvider__factory,
+    DefaultReserveInterestRateStrategy__factory
 } from '../types'
 import {
     withSaveAndVerify,
@@ -248,7 +258,7 @@ export const deployATokensAndRatesHelper = async (
         args,
         verify
     );
-    
+
 export const deployStableAndVariableTokensHelper = async (
     args: [tEthereumAddress, tEthereumAddress],
     verify?: boolean
@@ -259,3 +269,115 @@ export const deployStableAndVariableTokensHelper = async (
         args,
         verify
     );
+
+export const deployAaveOracle = async (
+    args: [tEthereumAddress[], tEthereumAddress[], tEthereumAddress, tEthereumAddress, string],
+    verify?: boolean
+) =>
+    withSaveAndVerify(
+        await new AaveOracle__factory(await getFirstSigner()).deploy(getFirstSignerAddress(), ...args),
+        eContractidNomi.AaveOracle,
+        args,
+        verify
+    );
+
+export const deployLendingRateOracle = async (verify?: boolean) =>
+    withSaveAndVerify(
+        await new LendingRateOracle__factory(await getFirstSigner()).deploy(getFirstSignerAddress()),
+        eContractidNomi.LendingRateOracle,
+        [],
+        verify
+    );
+
+export const deployMockAggregator = async (price: tStringTokenSmallUnits, verify?: boolean) =>
+    withSaveAndVerify(
+        await new MockAggregator__factory(await getFirstSigner()).deploy(price),
+        eContractidNomi.MockAggregator,
+        [price],
+        verify
+    );
+
+export const deployWETHMocked = async (verify?: boolean) =>
+    withSaveAndVerify(
+        await new WETH9Mocked__factory(await getFirstSigner()).deploy(),
+        eContractidNomi.WETHMocked,
+        [],
+        verify
+    );
+
+export const deployAaveProtocolDataProvider = async (
+    addressesProvider: tEthereumAddress,
+    verify?: boolean
+) =>
+    withSaveAndVerify(
+        await new AaveProtocolDataProvider__factory(await getFirstSigner()).deploy(addressesProvider),
+        eContractidNomi.AaveProtocolDataProvider,
+        [addressesProvider],
+        verify
+    );
+
+
+export const deployWETHGateway = async (args: [tEthereumAddress], verify?: boolean) =>
+    withSaveAndVerify(
+        await new WETHGateway__factory(await getFirstSigner()).deploy(getFirstSignerAddress(), ...args),
+        eContractidNomi.WETHGateway,
+        args,
+        verify
+    );
+
+export const deployLendingPoolCollateralManager = async (verify?: boolean) => {
+    const collateralManagerImpl = await new LendingPoolCollateralManager__factory(
+        await getFirstSigner()
+    ).deploy();
+    await insertContractAddressInDb(
+        eContractidNomi.LendingPoolCollateralManagerImpl,
+        collateralManagerImpl.address
+    );
+    return withSaveAndVerify(
+        collateralManagerImpl,
+        eContractidNomi.LendingPoolCollateralManager,
+        [],
+        verify
+    );
+};
+
+
+export const deployWalletBalancerProvider = async (verify?: boolean) =>
+    withSaveAndVerify(
+        await new WalletBalanceProvider__factory(await getFirstSigner()).deploy(),
+        eContractidNomi.WalletBalanceProvider,
+        [],
+        verify
+    );
+
+export const authorizeWETHGateway = async (
+    wethGateWay: tEthereumAddress,
+    lendingPool: tEthereumAddress
+) =>
+    await new WETHGateway__factory(await getFirstSigner())
+        .attach(wethGateWay)
+        .authorizeLendingPool(lendingPool);
+
+export const deployDefaultReserveInterestRateStrategy = async (
+    args: [tEthereumAddress, string, string, string, string, string, string],
+    verify: boolean
+) =>
+    withSaveAndVerify(
+        await new DefaultReserveInterestRateStrategy__factory(await getFirstSigner()).deploy(...args),
+        eContractidNomi.DefaultReserveInterestRateStrategy,
+        args,
+        verify
+    );
+
+export const deployRateStrategy = async (
+    strategyName: string,
+    args: [tEthereumAddress, string, string, string, string, string, string],
+    verify: boolean
+): Promise<tEthereumAddress> => {
+    switch (strategyName) {
+        default:
+            return await (
+                await deployDefaultReserveInterestRateStrategy(args, verify)
+            ).address;
+    }
+};

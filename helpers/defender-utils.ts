@@ -1,5 +1,5 @@
 import { formatEther } from '@ethersproject/units';
-import { DefenderRelaySigner, DefenderRelayProvider } from '@openzeppelin/defender-relay-client/lib/ethers';
+import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 import { Signer } from 'ethers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DRE, impersonateAccountsHardhat } from './misc-utils';

@@ -16,7 +16,7 @@ import {
 import { usingTenderly, verifyAtTenderly } from './tenderly-utils';
 import { verifyEtherscanContract } from './etherscan-verification';
 import { ZERO_ADDRESS } from './constants';
-
+import { ConfigNames, loadPoolConfig } from './configuration';
 
 export const getEthersSigners = async (): Promise<Signer[]> => {
   const ethersSigners = await Promise.all(await DRE.ethers.getSigners());
@@ -29,6 +29,13 @@ export const getEthersSigners = async (): Promise<Signer[]> => {
 };
 
 export const insertContractAddressInDb = async (id: eContractid, address: tEthereumAddress) =>
+  await getDb()
+    .set(`${id}.${DRE.network.name}`, {
+      address,
+    })
+    .write();
+
+export const rawInsertContractAddressInDb = async (id: string, address: tEthereumAddress) =>
   await getDb()
     .set(`${id}.${DRE.network.name}`, {
       address,
@@ -140,4 +147,24 @@ export const getOptionalParamAddressPerNetwork = (
     return ZERO_ADDRESS;
   }
   return getParamPerNetwork(param, network);
+};
+
+export const getContractAddressWithJsonFallback = async (
+  id: string,
+  pool: ConfigNames
+): Promise<tEthereumAddress> => {
+  const poolConfig = loadPoolConfig(pool);
+  const network = <eNetwork>DRE.network.name;
+  const db = getDb();
+
+  const contractAtMarketConfig = getOptionalParamAddressPerNetwork(poolConfig[id], network);
+  if (notFalsyOrZeroAddress(contractAtMarketConfig)) {
+    return contractAtMarketConfig;
+  }
+
+  const contractAtDb = await getDb().get(`${id}.${DRE.network.name}`).value();
+  if (contractAtDb?.address) {
+    return contractAtDb.address as tEthereumAddress;
+  }
+  throw Error(`Missing contract address ${id} at Market config and JSON local db`);
 };

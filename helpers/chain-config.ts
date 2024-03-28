@@ -2,6 +2,7 @@ export const SUPPORTED_ETHERSCAN_NETWORKS = [
     'mainnet',
     'goerli',
     'polygon',
+    'tenderly',
     'polygonZkEVMTestnet',
 ];
 

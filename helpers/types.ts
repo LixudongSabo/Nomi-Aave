@@ -299,3 +299,5 @@ export interface iParamsPerPool<T> {
   [AavePools.mainnet]: T;
   [AavePools.matic]: T;
 }
+
+export type tStringTokenSmallUnits = string; // 1 wei, or 1 basic unit of USDC, or 1 basic unit of DAI
